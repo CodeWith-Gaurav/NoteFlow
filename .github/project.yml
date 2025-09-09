@@ -1,0 +1,44 @@
+name: NoteFlow - Project I
+description: Tracking tasks for the MVP of NoteFlow (7th Semester).
+columns:
+  - name: To Do
+    cards:
+      # Phase 1: Setup & Planning
+      - note: "Finalize Tech Stack (React, Node.js/Express, MongoDB, Gemini API etc.)"
+      - note: "Initial UI Wireframe (Landing page + Infographic screen)"
+
+      # Phase 2: Frontend (MVP)
+      - note: "Create React app & setup Tailwind CSS"
+      - note: "Landing Page with Project Intro + Login/Signup placeholder"
+      - note: "Upload Text (Input box + file upload)"
+      - note: "Display Infographics (Static mock data first → later API driven)"
+
+      # Phase 3: Backend (MVP)
+      - note: "Setup Node.js/Express backend"
+      - note: "Create API for text upload & storage (MongoDB/SQLite)"
+      - note: "Setup route for sending text to Gemini API"
+      - note: "Return structured infographic data to frontend"
+
+      # Phase 4: AI Integration
+      - note: "Connect backend with Gemini API"
+      - note: "Define prompt template for generating infographic-friendly data"
+      - note: "Parse AI response → format JSON output (charts, keywords, points etc.)"
+      - note: "Send JSON to frontend to visualize"
+
+      # Phase 5: Infographic Generation
+      - note: "Build Infographic UI (charts, icons, colors)"
+      - note: "Map AI JSON response → Infographic display"
+      - note: "Add download option (PDF/PNG export)"
+
+      # Phase 6: Testing & Wrap-Up
+      - note: "Test end-to-end (Upload → AI → Infographic → Download)"
+      - note: "Fix UI/UX bugs"
+      - note: "Prepare final demo (for evaluation)"
+
+  - name: In Progress
+    cards:
+      - note: "Create GitHub Project Board ✅ (this step you are doing now)"
+
+  - name: Done
+    cards:
+      - note: "Create GitHub Repo & README ✅"
