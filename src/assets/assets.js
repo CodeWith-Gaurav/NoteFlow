@@ -24,6 +24,10 @@ import react from "./react.png";
 import java from "./java.png";
 import gemini from "./gemini.png";
 import tailwind from "./tailwind.svg";
+import image1 from "./image1.jpg";
+import image2 from "./image2.jpg";
+import image3 from "./image3.jpg";
+import image4 from "./image4.jpg";
 
 export const company_logos = [react, java, gemini, tailwind];
 
@@ -58,24 +62,21 @@ export const teamData = [
   {
     name: "Harsh Verma",
     title: "Final Year, CSE",
-    image:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200",
+    image: image3,
   },
   {
     name: "Gaurav Vashistha",
     title: "Final Year, CSE",
-    image:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
+    image: image4,
   },
   {
     name: "Gunjan Jangid",
     title: "Final Year, CSE",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&h=200&auto=format&fit=crop",
+    image: image2,
   },
   {
     name: "Chirag Murdiya",
     title: "Final Year, CSE",
-    image: "https://randomuser.me/api/portraits/women/10.jpg",
+    image: image1,
   },
 ];
