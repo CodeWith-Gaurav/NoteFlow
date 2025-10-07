@@ -1,13 +1,32 @@
 import React from 'react'
 import assets from '../assets/assets'
 import { motion } from "motion/react"
+import { Link } from 'react-router-dom'
+// ⭐️ Import useUser from Clerk
+import { useUser, SignInButton } from '@clerk/clerk-react'
+import { useNavigate } from 'react-router-dom' // ⭐️ Import useNavigate
 
 const Footer = ({ theme }) => {
+    const { isSignedIn } = useUser()
+    const navigate = useNavigate()
+
+    const handleGetStarted = () => {
+        if (!isSignedIn) {
+            // Trigger the Sign In modal
+            const signInButton = document.getElementById('footer-sign-in-trigger');
+            if (signInButton) {
+                signInButton.click();
+            }
+        } else {
+            // If signed in, navigate directly
+            navigate('/generate');
+        }
+    }
     return (
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut'  }}
+            transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
             viewport={{ once: true }}
             className='bg-slate-50 dark:bg-gray-900 pt-10 sm:pt-10 mt-20 sm:mt-40 px-4 sm:px-10 lg:px-24 xl:px-40'>
             <div className='flex justify-between lg:items-center max-lg:flex-col gap-10'>
@@ -26,12 +45,22 @@ const Footer = ({ theme }) => {
                     <h3 className='font-semibold'>Generate Infographics</h3>
                     <p className='text-sm mt-2 mb-6'>Your smart companion for capturing, organizing, and learning better.</p>
                     <div className='flex gap-2 text-sm'>
-                        <a href="#get-started" className='text-sm max-sm:hidden flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full cursor-pointer hover:scale-103 transition-all'>
+                        {/* ⭐️ Change Link to div and use onClick */}
+                        <div
+                            onClick={handleGetStarted}
+                            className='text-sm max-sm:hidden flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full cursor-pointer hover:scale-103 transition-all'>
                             Get Started <img src={assets.arrow_icon} width={14} alt="" />
-                        </a>
+                        </div>
+                    </div>
+                    {/* ⭐️ Hidden SignInButton to act as a modal trigger */}
+                    <div className='hidden'>
+                        <SignInButton mode='modal'>
+                            <button id="footer-sign-in-trigger"></button>
+                        </SignInButton>
                     </div>
 
                 </div>
+
             </div>
             <hr className='border-gray-300 dark:border-gray-600 my-6' />
 

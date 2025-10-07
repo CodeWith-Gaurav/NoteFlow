@@ -1,8 +1,29 @@
 import React from 'react'
 import assets from '../assets/assets'
 import { motion } from "motion/react"
+// ⭐️ Import Link
+import { Link } from 'react-router-dom'
+import { useUser, SignInButton } from '@clerk/clerk-react'
+import { useNavigate } from 'react-router-dom' // ⭐️ Import useNavigate
 
 const Hero = () => {
+    const { isSignedIn } = useUser()
+    const navigate = useNavigate()
+
+    const handleGetStarted = (e) => {
+        if (!isSignedIn) {
+            // If not signed in, manually trigger the Sign In modal
+            // The Clerk modal is usually triggered by a SignInButton component.
+            // We use a workaround here by making a dedicated button that is a SignInButton.
+            const signInButton = document.getElementById('hero-sign-in-trigger');
+            if (signInButton) {
+                signInButton.click();
+            }
+        } else {
+            // If signed in, navigate directly
+            navigate('/generate');
+        }
+    }
     return (
         <div id='hero' className='flex flex-col items-center gap-6 py-20 px-4 sm:px-12 lg:px-24 xl:px-40 text-center w-full overflow-hidden text-gray-700 dark:text-white'>
 
@@ -32,12 +53,30 @@ const Hero = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+                viewport={{ once: true }}>
+                {/* ⭐️ Change Link to a standard div/button and use onClick */}
+                <div
+                    onClick={handleGetStarted}
+                    className='text-sm flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-full cursor-pointer hover:scale-105 transition-all shadow-lg shadow-primary/50'>
+                    Get Started Now
+                </div>
+            </motion.div>
+            <div className='hidden'>
+                <SignInButton mode='modal'>
+                    <button id="hero-sign-in-trigger"></button>
+                </SignInButton>
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.7 }}
                 viewport={{ once: true }}
                 className='relative'>
                 <img src={assets.hero_img} className='w-full max-w-6xl' alt="" />
                 <img src={assets.bgImage1} className='absolute -top-40 -right-40 sm:-top-100 sm:-right-70 -z-1 dark:hidden' alt="" />
-        </motion.div>
+            </motion.div>
 
         </div >
     )
