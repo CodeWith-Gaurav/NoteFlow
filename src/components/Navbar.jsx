@@ -1,12 +1,28 @@
 import React, { useState } from 'react'
 import assets from '../assets/assets'
 import ThemeToggleBtn from './ThemeToggleBtn'
-import { motion } from "motion/react"
+import { motion } from "motion/react" // Or 'framer-motion' if you're using the standard package
 import { Link, useNavigate } from 'react-router-dom'
 import { useUser, SignInButton, UserButton } from '@clerk/clerk-react'
 
-const Navbar = ({ theme, setTheme, isGeneratorPage }) => {
+// ⭐️ Use isEntranceAnimationComplete prop
+const Navbar = ({ theme, setTheme, isGeneratorPage, isEntranceAnimationComplete }) => {
 
+    // Define the variants
+    const navVariants = {
+        hidden: { y: -50, opacity: 0 },
+        // Animate only when the entrance flag is true
+        visible: { 
+            y: 0, 
+            opacity: 1, 
+            transition: { 
+                type: 'spring', 
+                stiffness: 120, 
+                delay: 0.2 // Delay the Navbar slightly
+            } 
+        },
+    };
+    
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { isSignedIn } = useUser()
     const navigate = useNavigate()
@@ -15,14 +31,14 @@ const Navbar = ({ theme, setTheme, isGeneratorPage }) => {
 
     let AuthButton;
     if (isSignedIn) {
-        // ⭐️ On generator page, we only show the UserButton in the sidebar footer (next file).
-        // On the landing page, we keep the button here.
+        // ... AuthButton logic remains the same ...
         AuthButton = (
             <div className={`max-sm:hidden ${isGeneratorPage ? 'hidden' : 'block'}`}>
                 <UserButton afterSignOutUrl="/" />
             </div>
         )
     } else {
+        // ... AuthButton logic remains the same ...
         AuthButton = (
             <SignInButton mode='modal'>
                 <div className={buttonClass}>
@@ -33,12 +49,15 @@ const Navbar = ({ theme, setTheme, isGeneratorPage }) => {
     }
 
     return (
+        // ⭐️ CRITICAL FIX: Replace the direct `initial/animate/transition` props 
+        // with the controlled `variants` and `isEntranceAnimationComplete`.
         <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            // ⭐️ FIX: Always use the translucent style (bg-white/50 dark:bg-gray-900/70)
-            // The content underneath determines the final look.
+            variants={navVariants} // ⭐️ Use the defined variants
+            initial="hidden"       // ⭐️ Start from the hidden state
+            // ⭐️ CONTROL: If the flag is true, transition to "visible", otherwise stay "hidden"
+            animate={isEntranceAnimationComplete ? "visible" : "hidden"} 
+            
+            // ⭐️ Keep existing className logic
             className={`flex justify-between items-center 
                 ${isGeneratorPage ? 'px-4 py-3' : 'px-4 sm:px-12 lg:px-24 xl:px-40 py-4'} 
                 sticky top-0 z-20 backdrop-blur-xl font-medium 
@@ -50,6 +69,7 @@ const Navbar = ({ theme, setTheme, isGeneratorPage }) => {
             </Link>
 
             {/* Navigation Links (Only shown on landing page) */}
+            {/* ... (Navigation links and sidebar logic remains the same) ... */}
             {!isGeneratorPage && (
                 <div className={`text-gray-700 dark:text-white sm:text-sm ${!sidebarOpen ? "max-sm:w-0 overflow-hidden" : "max-sm:w-60 max-sm:pl-10"} max-sm:fixed top-0 bottom-0 right-0 max-sm:min-h-screen max-sm:h-full max-sm:flex-col max-sm:bg-primary max-sm:text-white max-sm:pt-20 flex sm:items-center gap-5 transform-all`}>
                     <img src={assets.close_icon} className='w-5 absolute right-4 top-4 sm:hidden' onClick={() => setSidebarOpen(false)} alt="" />
@@ -61,10 +81,8 @@ const Navbar = ({ theme, setTheme, isGeneratorPage }) => {
             )}
 
             <div className='flex items-center gap-2 sm:gap-4'>
-                {/* ⭐️ Only show theme toggle on landing page (or if you want it on generator page, keep it) */}
                 {!isGeneratorPage && <ThemeToggleBtn theme={theme} setTheme={setTheme} />}
 
-                {/* Menu icon for landing page only mobile sidebar */}
                 {!isGeneratorPage && (
                     <img src={theme === 'dark' ? assets.menu_icon_dark : assets.menu_icon} alt="" onClick={() => setSidebarOpen(true)} className='w-8 sm:hidden' />
                 )}
