@@ -86,7 +86,7 @@ const Hero = ({ isEntranceAnimationComplete, theme = 'dark' }) => {
                     animate={animateState} // ⭐️ CONTROLLED ANIMATION
                     className='inline-flex items-center gap-2 border border-gray-300 p-1.5 pr-4 rounded-full'>
                     <img className='w-20' src={assets.group_profile} alt="" />
-                    <p className='text-xs font-medium'>Trusted by Learners & Innovators</p>k
+                    <p className='text-xs font-medium'>Trusted by Learners & Innovators</p>
                 </motion.div>
 
                 {/* 2. MAIN HEADING */}
