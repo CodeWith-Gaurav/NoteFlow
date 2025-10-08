@@ -6,7 +6,7 @@
 
 *{
   font-family: "Manrope", sans-serif;
-  font-size: 500;
+  font-weight: 500;
 }
 
 /* ⭐️ REMOVED: All Clerk modal overrides (e.g., .cl-modal *, .cl-modal-open #cursor-dot, etc.) 
