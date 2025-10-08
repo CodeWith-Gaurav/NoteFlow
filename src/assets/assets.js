@@ -80,3 +80,26 @@ export const teamData = [
     image: image1,
   },
 ];
+
+export const faqContent = [
+    {
+        q: "What kind of notes/documents can NoteFlow transform?",
+        a: "NoteFlow's AI is versatile. You can upload large PDFs (research papers, reports, e-books), paste raw text (lecture notes, meeting summaries), or simply enter a topic. Our AI extracts the key concepts and relationships from any format to build the infographic."
+    },
+    {
+        q: "How fast is the infographic generation process?",
+        a: "Generation is nearly instantaneous. Once you provide the input (text or document), the AI processes it and begins structuring the infographic in seconds. Complex documents may take slightly longer, but the entire process is designed to be highly efficient."
+    },
+    {
+        q: "Can I edit the infographics after they are generated?",
+        a: "Yes. While NoteFlow provides a fully structured infographic, you have options within the Infographic Studio to fine-tune the layout, adjust the color palette, and edit text blocks to perfectly match your needs before exporting."
+    },
+    {
+        q: "Is NoteFlow suitable for academic use or just business?",
+        a: "NoteFlow is built for both. Students and academics use it to summarize study guides, research papers, and complex theories. Professionals use it for simplifying reports, creating presentations, and making complex data easily digestible for clients and colleagues."
+    },
+    {
+        q: "What is the difference between NoteFlow and a standard mind-mapping tool?",
+        a: "Standard tools require manual drawing and connection. NoteFlow is AI-driven: you provide the input, and the AI automatically analyzes the structure, identifies relationships, and generates the visual framework for you. It's automation vs. manual labor."
+    },
+];

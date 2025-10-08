@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
 @import "tailwindcss";
 
@@ -6,14 +6,12 @@
 
 *{
   font-family: "Manrope", sans-serif;
-  font-weight: 500;
-  cursor: none;
+  font-size: 500;
 }
 
-.cl-modal * {
-  cursor: default !important;
-}
+/* ⭐️ REMOVED: All Clerk modal overrides (e.g., .cl-modal *, .cl-modal-open #cursor-dot, etc.) 
+   are now unnecessary as the default cursor is active. */
 
-@theme{
-  --color-primary: #5044E5;
+@theme {
+  --color-primary: #5044e5;
 }
