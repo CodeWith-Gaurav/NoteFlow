@@ -36,6 +36,13 @@ Current digital note-taking platforms lack the **intelligent automation** needed
 
 ---
 
+<div align="center" style="border: 2px solid #eaeaea; border-radius: 12px; padding: 10px; background-color: #f9f9f9;">
+  <img src="./src/assets/NoteFlow_Demo.png" alt="NoteFlow Objectives" width="800" style="border-radius: 8px;"/>
+  <p><em>First Look of NoteFlow</em></p>
+</div>
+
+---
+
 ## ✨ Frontend Implementation Status (React/Tailwind)
 
 The core user interface and interaction flow are now fully complete, utilizing **React Router** for navigation, **Clerk** for user management, and **Tailwind CSS** for styling.
@@ -106,6 +113,28 @@ flowchart TD
 
 ---
 
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/CodeWith-Gaurav/NoteFlow
+cd NoteFlow
+```
+## Install Dependencies
+```bash
+npm install
+# or
+yarn install
+```
+## Run the Application
+```bash
+npm run dev
+# or
+yarn dev
+```
+The application will now run on http://localhost:5173
+ (or your configured port) with the enhanced preloader and entrance sequence.
+ 
 ## 📜 License
 
 This project is developed as part of the Final Year Project (B.Tech – Computer Science & Engineering, 4th Year-7th Semester) under the guidance of **Dr. Atul Chaudhary**.  
