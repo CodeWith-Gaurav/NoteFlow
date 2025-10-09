@@ -1,5 +1,14 @@
 # 📘 NoteFlow  
-**An AI-Powered Platform for Automated Infographic Generation** ---
+**An AI-Powered Platform for Automated Infographic Generation** 
+
+---
+
+<div align="center" style="border: 2px solid #eaeaea; border-radius: 12px; padding: 10px; background-color: #f9f9f9;">
+  <img src="./src/assets/NoteFlow_Demo.png" alt="NoteFlow Objectives" width="800" style="border-radius: 8px;"/>
+  <p><em>First Look of NoteFlow</em></p>
+</div>
+
+---
 
 ## 🚀 Project Overview
 **NoteFlow** is a full-stack web application designed to simplify the way students and teachers interact with educational content.  
@@ -33,13 +42,6 @@ Current digital note-taking platforms lack the **intelligent automation** needed
    - User profiles & note management  
    - Export infographics as PDF/PNG  
    - Anonymous, shareable infographic links  
-
----
-
-<div align="center" style="border: 2px solid #eaeaea; border-radius: 12px; padding: 10px; background-color: #f9f9f9;">
-  <img src="./src/assets/NoteFlow_Demo.png" alt="NoteFlow Objectives" width="800" style="border-radius: 8px;"/>
-  <p><em>First Look of NoteFlow</em></p>
-</div>
 
 ---
 
