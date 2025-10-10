@@ -134,8 +134,7 @@ npm run dev
 # or
 yarn dev
 ```
-The application will now run on http://localhost:5173
- (or your configured port) with the enhanced preloader and entrance sequence.
+The application will now run on http://localhost:5173 with the enhanced preloader and entrance sequence.
  
 ## 📜 License
 
