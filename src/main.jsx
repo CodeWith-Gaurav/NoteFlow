@@ -5,8 +5,9 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx' // Make sure the path to your App component is correct
 import { ClerkProvider } from '@clerk/clerk-react'
-// Import BrowserRouter for routing
 import { BrowserRouter } from 'react-router-dom'
+// ⭐️ SEO: Import HelmetProvider
+import { HelmetProvider } from 'react-helmet-async'
 
 // Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -19,8 +20,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <BrowserRouter>
-        {/* Your existing App component is now wrapped by ClerkProvider */}
-        <App />
+        {/* ⭐️ SEO: Wrap App with HelmetProvider */}
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </BrowserRouter>
     </ClerkProvider>
   </StrictMode>,
