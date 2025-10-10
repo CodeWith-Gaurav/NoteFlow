@@ -10,18 +10,13 @@ import Preloader from './components/Preloader'
 import FAQSection from './components/FAQSection'
 import CTABanner from './components/CTABanner'
 import { SignInButton } from '@clerk/clerk-react'
-// ⭐️ SEO: Import Helmet
-import { Helmet } from 'react-helmet-async'
 
 
 const LandingPage = ({ theme, setTheme, isEntranceAnimationComplete }) => (
     <>
-        {/* ⭐️ SEO: Set metadata for the landing page */}
-        <Helmet>
-            <title>NoteFlow | Transform Notes into Smart Infographics</title>
-            <meta name="description" content="Turn scattered ideas into structured knowledge with NoteFlow. Our AI-powered tool instantly generates beautiful and informative infographics from your notes, PDFs, or text." />
-        </Helmet>
 
+        <title>NoteFlow | Transform Notes into Smart Infographics</title>
+        <meta name="description" content="Turn scattered ideas into structured knowledge with NoteFlow. Our AI-powered tool instantly generates beautiful and informative infographics from your notes, PDFs, or text." />
         <Hero theme={theme} isEntranceAnimationComplete={isEntranceAnimationComplete} />
         <Services />
         <Teams />
@@ -63,7 +58,7 @@ const App = () => {
             {loading && <Preloader onLoaderComplete={handleLoaderComplete} />}
             <div className={loading ? 'invisible' : 'visible'}>
                 <Navbar theme={theme} setTheme={setTheme} isGeneratorPage={isGeneratorPage} isEntranceAnimationComplete={isEntranceAnimationComplete} />
-                
+
                 {/* ⭐️ SEO: Use a <main> tag for primary content */}
                 <main>
                     <Routes>

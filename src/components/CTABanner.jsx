@@ -8,21 +8,21 @@ import { Color } from 'three';
 
 // --- UTILITY FUNCTIONS ---
 const hexToNormalizedRGB = color => {
-  if (color.startsWith('#')) {
-    color = color.replace('#', '');
-    return [
-      parseInt(color.slice(0, 2), 16) / 255,
-      parseInt(color.slice(2, 4), 16) / 255,
-      parseInt(color.slice(4, 6), 16) / 255
-    ];
-  } else if (color.startsWith('rgb')) {
-    const [r, g, b] = color
-      .replace(/[^\d,]/g, '')
-      .split(',')
-      .map(Number);
-    return [r / 255, g / 255, b / 255];
-  }
-  return [1, 1, 1];
+    if (color.startsWith('#')) {
+        color = color.replace('#', '');
+        return [
+            parseInt(color.slice(0, 2), 16) / 255,
+            parseInt(color.slice(2, 4), 16) / 255,
+            parseInt(color.slice(4, 6), 16) / 255
+        ];
+    } else if (color.startsWith('rgb')) {
+        const [r, g, b] = color
+            .replace(/[^\d,]/g, '')
+            .split(',')
+            .map(Number);
+        return [r / 255, g / 255, b / 255];
+    }
+    return [1, 1, 1];
 };
 
 // --- SHADERS ---
@@ -74,114 +74,114 @@ void main() {
 
 // --- R3F PLANE ---
 const SilkPlane = forwardRef(function SilkPlane({ uniforms }, ref) {
-  const { viewport } = useThree();
+    const { viewport } = useThree();
 
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.scale.set(viewport.width, viewport.height, 1);
-    }
-  }, [ref, viewport]);
+    useLayoutEffect(() => {
+        if (ref.current) {
+            ref.current.scale.set(viewport.width, viewport.height, 1);
+        }
+    }, [ref, viewport]);
 
-  useFrame((_, delta) => {
-    if (ref.current && ref.current.material.uniforms.uTime) {
-      ref.current.material.uniforms.uTime.value += 1.0 * delta;
-    }
-  });
+    useFrame((_, delta) => {
+        if (ref.current && ref.current.material.uniforms.uTime) {
+            ref.current.material.uniforms.uTime.value += 1.0 * delta;
+        }
+    });
 
-  return (
-    <mesh ref={ref}>
-      <planeGeometry args={[1, 1, 1, 1]} />
-      <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} />
-    </mesh>
-  );
+    return (
+        <mesh ref={ref}>
+            <planeGeometry args={[1, 1, 1, 1]} />
+            <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} />
+        </mesh>
+    );
 });
 
 // --- SILK CANVAS WRAPPER ---
 const Silk = ({ speed = 5, scale = 1, color = '#7B7481', noiseIntensity = 1.5, rotation = 0 }) => {
-  const meshRef = useRef();
+    const meshRef = useRef();
 
-  const uniforms = useMemo(
-    () => ({
-      uSpeed: { value: speed },
-      uScale: { value: scale },
-      uNoiseIntensity: { value: noiseIntensity },
-      uColor: { value: new Color(...hexToNormalizedRGB(color)) },
-      uRotation: { value: rotation },
-      uTime: { value: 0 }
-    }),
-    [speed, scale, noiseIntensity, color, rotation]
-  );
+    const uniforms = useMemo(
+        () => ({
+            uSpeed: { value: speed },
+            uScale: { value: scale },
+            uNoiseIntensity: { value: noiseIntensity },
+            uColor: { value: new Color(...hexToNormalizedRGB(color)) },
+            uRotation: { value: rotation },
+            uTime: { value: 0 }
+        }),
+        [speed, scale, noiseIntensity, color, rotation]
+    );
 
-  return (
-    <Canvas dpr={[1, 2]} frameloop="always" className="w-full h-full">
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
-    </Canvas>
-  );
+    return (
+        <Canvas dpr={[1, 2]} frameloop="always" className="w-full h-full">
+            <SilkPlane ref={meshRef} uniforms={uniforms} />
+        </Canvas>
+    );
 };
 
 // --- MAIN COMPONENT ---
 const CTABanner = ({ theme }) => {
-  const { isSignedIn } = useUser();
-  const navigate = useNavigate();
+    const { isSignedIn } = useUser();
+    const navigate = useNavigate();
 
-  const handleGetStarted = () => {
-    if (!isSignedIn) {
-      const signInButton = document.getElementById('cta-sign-in-trigger');
-      if (signInButton) signInButton.click();
-    } else {
-      navigate('/generate');
-    }
-  };
+    const handleGetStarted = () => {
+        if (!isSignedIn) {
+            const signInButton = document.getElementById('cta-sign-in-trigger');
+            if (signInButton) signInButton.click();
+        } else {
+            navigate('/generate');
+        }
+    };
 
-  const variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
-  };
+    const variants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
+    };
 
-  const textColor = 'text-white';
-  const buttonClasses =
-    'bg-primary text-white px-8 py-3 rounded-full cursor-pointer hover:scale-105 transition-all shadow-lg shadow-primary/50 text-sm font-medium';
+    const textColor = 'text-white';
+    const buttonClasses =
+        'bg-primary text-white px-8 py-3 rounded-full cursor-pointer hover:scale-105 transition-all shadow-lg shadow-primary/50 text-sm font-medium';
 
-  return (
-    <motion.section
-      variants={variants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      className="relative py-20 overflow-hidden min-h-[300px]"
-    >
-      {/* 1. Background */}
-      <div className="absolute inset-0 z-0 min-h-[300px]">
-        <Silk speed={2} scale={2.0} color="rgb(66, 123, 255)" noiseIntensity={1.0} rotation={0.5} />
-      </div>
+    return (
+        <motion.section
+            variants={variants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="relative py-20 overflow-hidden min-h-[300px]"
+        >
+            {/* 1. Background */}
+            <div className="absolute inset-0 z-0 min-h-[300px]">
+                <Silk speed={2} scale={2.0} color="rgb(66, 123, 255)" noiseIntensity={1.0} rotation={0.5} />
+            </div>
 
-      {/* 2. Overlay */}
-      <div className="absolute inset-0 bg-black/40 z-[5] pointer-events-none"></div>
+            {/* 2. Overlay */}
+            <div className="absolute inset-0 bg-black/40 z-[5] pointer-events-none"></div>
 
-      {/* 3. Content */}
-      <div className={`relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-12 ${textColor}`}>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4">
-          Transform your notes into Infographics now.
-        </h2>
+            {/* 3. Content */}
+            <div className={`relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-12 ${textColor}`}>
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4">
+                    Transform your notes into Infographics now.
+                </h2>
 
-        <p className="text-lg font-medium opacity-90 mb-8 max-w-2xl mx-auto">
-          Stop writing notes and start creating knowledge. Ready to streamline your study process?
-        </p>
+                <p className="text-lg font-medium opacity-90 mb-8 max-w-2xl mx-auto">
+                    Stop writing notes and start creating knowledge. Ready to streamline your study process?
+                </p>
 
-        {/* ✅ Get Started Button */}
-        <div onClick={handleGetStarted} className={`inline-flex items-center justify-center ${buttonClasses}`}>
-          Get Started Now
-        </div>
+                {/* ✅ Get Started Button */}
+                <div onClick={handleGetStarted} className={`inline-flex items-center justify-center ${buttonClasses}`}>
+                    Get Started Now
+                </div>
 
-        {/* Hidden Sign-In Trigger */}
-        <div className="hidden">
-          <SignInButton mode="modal">
-            <button id="cta-sign-in-trigger"></button>
-          </SignInButton>
-        </div>
-      </div>
-    </motion.section>
-  );
+                {/* Hidden Sign-In Trigger */}
+                <div className="hidden">
+                    <SignInButton mode="modal">
+                        <button id="cta-sign-in-trigger"></button>
+                    </SignInButton>
+                </div>
+            </div>
+        </motion.section>
+    );
 };
 
 export default CTABanner;

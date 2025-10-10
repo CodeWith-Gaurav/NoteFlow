@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import assets from '../assets/assets'
 import { useUser, UserButton } from '@clerk/clerk-react'
 import { Navigate } from 'react-router-dom'
-// ⭐️ SEO: Import Helmet
-import { Helmet } from 'react-helmet-async'
 
 const InfographicGenerator = () => {
     // ... your existing state and functions
@@ -49,11 +47,10 @@ const InfographicGenerator = () => {
 
     return (
         <div className='min-h-screen flex text-gray-800 dark:text-white dark:bg-black relative'>
-            {/* ⭐️ SEO: Set a unique title for this page */}
-            <Helmet>
+            
                 <title>Infographic Studio | NoteFlow</title>
                 <meta name="description" content="Create, edit, and generate stunning infographics from your documents and ideas in the NoteFlow Studio." />
-            </Helmet>
+        
 
             {/* The rest of your component JSX remains the same... */}
             {/* Sidebar Container */}
