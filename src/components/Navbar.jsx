@@ -51,7 +51,7 @@ const Navbar = ({ theme, setTheme, isGeneratorPage, isEntranceAnimationComplete 
             className={`flex justify-between items-center 
                 ${isGeneratorPage ? 'px-4 py-3' : 'px-4 sm:px-12 lg:px-24 xl:px-40 py-4'} 
                 sticky top-0 z-20 backdrop-blur-xl font-medium 
-                bg-white/50 dark:bg-gray-900/70`
+                bg-white/80 dark:bg-gray-900/70`
             }>
             <Link to='/' className={`w-32 sm:w-40 ${isGeneratorPage ? 'max-w-[100px] sm:max-w-[120px]' : ''}`}>
                 <img src={theme === 'dark' ? assets.logo_dark : assets.logo} className='w-full' alt='NoteFlow Logo' />

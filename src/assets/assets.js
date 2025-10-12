@@ -20,6 +20,7 @@ import logo_dark from "./logo_dark.svg";
 import menu_icon_dark from "./menu_icon_dark.svg";
 import sun_icon from "./sun_icon.svg";
 import moon_icon from "./moon_icon.svg";
+import add_icon from "./add_icon.png";
 import react from "./react.png";
 import java from "./java.png";
 import gemini from "./gemini.png";
@@ -43,6 +44,7 @@ const assets = {
   marketing_icon,
   social_icon,
   menu_icon,
+  add_icon,
   close_icon,
   email_icon,
   person_icon,

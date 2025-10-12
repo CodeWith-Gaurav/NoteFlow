@@ -54,8 +54,28 @@ const App = () => {
 
 
     return (
-        <div className='dark:bg-black relative'>
+        <div className='relative'>
             {loading && <Preloader onLoaderComplete={handleLoaderComplete} />}
+            {theme === 'dark' && (
+                <div 
+                    className="fixed inset-0 z-[-1] min-h-screen w-full" 
+                    style={{
+                        // Using 'fixed' instead of 'absolute' and z-[-1] to ensure it covers the entire viewport and stays behind content
+                        background: "radial-gradient(125% 125% at 50% 10%, #000000 40%, #0d1a36 100%)",
+                    }}
+                />
+            )}
+            {theme === 'light' && (
+                <div 
+                    className="fixed inset-0 z-[-1] min-h-screen w-full bg-white" 
+                    style={{
+                        backgroundImage: `
+                            radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #14b8a6 100%)
+                        `,
+                        backgroundSize: "100% 100%",
+                    }}
+                />
+            )}
             <div className={loading ? 'invisible' : 'visible'}>
                 <Navbar theme={theme} setTheme={setTheme} isGeneratorPage={isGeneratorPage} isEntranceAnimationComplete={isEntranceAnimationComplete} />
 

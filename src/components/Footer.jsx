@@ -12,6 +12,7 @@ const Footer = ({ theme }) => {
 
     const handleGetStarted = () => {
         if (!isSignedIn) {
+            // Programmatically click the hidden SignInButton trigger
             const signInButton = document.getElementById('footer-sign-in-trigger');
             if (signInButton) {
                 signInButton.click();
@@ -28,7 +29,7 @@ const Footer = ({ theme }) => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
             viewport={{ once: true }}
-            className='bg-slate-50 dark:bg-gray-900 pt-10 sm:pt-10 mt-20 sm:mt-40 px-4 sm:px-10 lg:px-24 xl:px-40'>
+            className='bg-white/70 dark:bg-gray-900/50 pt-10 sm:pt-10 px-4 sm:px-10 lg:px-24 xl:px-40'>
             <div className='flex justify-between lg:items-center max-lg:flex-col gap-10'>
                 <div className='space-y-5 text-sm text-gray-700 dark:text-gray-400'>
                     <img src={theme === 'dark' ? assets.logo_dark : assets.logo} className="w-32 sm:w-44" alt="NoteFlow Logo" />
@@ -47,7 +48,7 @@ const Footer = ({ theme }) => {
                         <div
                             onClick={handleGetStarted}
                             className='text-sm max-sm:hidden flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full cursor-pointer hover:scale-103 transition-all'>
-                            Get Started <img src={assets.arrow_icon} width={14} alt="" />
+                            Get Started <img src={assets.arrow_icon} width={14} alt="Arrow icon" />
                         </div>
                     </div>
                     <div className='hidden'>
@@ -62,9 +63,9 @@ const Footer = ({ theme }) => {
                 <p>Copyright 2025 @ NoteFlow - All Rights Reserved.</p>
                 <div className='flex items-center justify-between gap-4'>
                     {/* ⭐️ SEO: Added descriptive alt text */}
-                    <img src={assets.facebook_icon} alt="Facebook" />
-                    <img src={assets.twitter_icon} alt="Twitter" />
-                    <img src={assets.instagram_icon} alt="Instagram" />
+                    <img src={assets.facebook_icon} alt="Facebook logo" />
+                    <img src={assets.twitter_icon} alt="Twitter logo" />
+                    <img src={assets.instagram_icon} alt="Instagram logo" />
                 </div>
             </div>
         </motion.footer>

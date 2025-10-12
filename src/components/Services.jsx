@@ -45,7 +45,7 @@ const Services = () => {
             transition={{ duration: 0.7, delay: 0.5 }}
             viewport={{ once: true }} 
             id='services' 
-            className='relative flex flex-col items-center gap-7 px-4 sm:px-12 lg:px-24 xl:px-40 pt-20 sm:pt-40 text-gray-700 dark:text-white'>
+            className='relative flex flex-col items-center gap-7 px-4 sm:px-12 lg:px-24 xl:px-40 pt-20 sm:pt-40 text-gray-700 dark:text-white bg-transparent'>
             
             <img src={assets.bgImage2} className='absolute -top-110 -left-70 -z-1 dark:hidden' alt="" />
             <Title title='How can we help?' desc='From note-taking to organizing and planning, NoteFlow makes it easier to manage your ideas and keep everything connected' />

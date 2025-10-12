@@ -61,7 +61,7 @@ const Hero = ({ isEntranceAnimationComplete, theme = 'dark' }) => {
     const particleColors = theme === 'dark' ? PARTICLE_COLORS_DARK : PARTICLE_COLORS_LIGHT;
 
     return (
-        <div id='hero' className='relative flex flex-col items-center gap-6 py-20 px-4 sm:px-12 lg:px-24 xl:px-40 text-center w-full overflow-hidden text-gray-700 dark:text-white'>
+        <div id='hero' className='relative flex flex-col items-center gap-6 py-20 px-4 sm:px-12 lg:px-24 xl:px-40 text-center w-full overflow-hidden text-gray-700 dark:text-white bg-transparent'>
 
 
             <div className='absolute inset-0 z-0 h-full w-full pointer-events-none'>
@@ -130,7 +130,6 @@ const Hero = ({ isEntranceAnimationComplete, theme = 'dark' }) => {
                     className='relative'>
                     {/* Ensure your image assets (hero_img and bgImage1) are correctly configured in assets.js */}
                     <img src={assets.hero_img} className='w-full max-w-6xl' alt="NoteFlow Hero Image" />
-                    <img src={assets.bgImage1} className='absolute -top-40 -right-40 sm:-top-100 sm:-right-70 -z-1 dark:hidden' alt="Background graphic" />
                 </motion.div>
 
             </div >
