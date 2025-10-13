@@ -86,4 +86,4 @@ const Navbar = ({ theme, setTheme, isGeneratorPage, isEntranceAnimationComplete 
     )
 }
 
-export default Navbar
+export default React.memo(Navbar)

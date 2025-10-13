@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Services from './components/Services'
-import Teams from './components/Teams'
 import Footer from './components/Footer'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import InfographicGenerator from './pages/InfographicGenerator'
@@ -19,7 +18,6 @@ const LandingPage = ({ theme, setTheme, isEntranceAnimationComplete }) => (
         <meta name="description" content="Turn scattered ideas into structured knowledge with NoteFlow. Our AI-powered tool instantly generates beautiful and informative infographics from your notes, PDFs, or text." />
         <Hero theme={theme} isEntranceAnimationComplete={isEntranceAnimationComplete} />
         <Services />
-        <Teams />
         <FAQSection theme={theme} />
         <CTABanner theme={theme} />
     </>
@@ -32,7 +30,6 @@ const App = () => {
     const location = useLocation()
     const isGeneratorPage = location.pathname === '/generate'
 
-    const mouse = useRef({ x: 0, y: 0 })
 
     const handleLoaderComplete = () => {
         setLoading(false);
@@ -41,24 +38,13 @@ const App = () => {
         }, 50);
     };
 
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            mouse.current.x = e.clientX
-            mouse.current.y = e.clientY
-        }
-        document.addEventListener('mousemove', handleMouseMove)
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove)
-        }
-    }, [])
-
 
     return (
         <div className='relative'>
             {loading && <Preloader onLoaderComplete={handleLoaderComplete} />}
             {theme === 'dark' && (
-                <div 
-                    className="fixed inset-0 z-[-1] min-h-screen w-full" 
+                <div
+                    className="fixed inset-0 z-[-1] min-h-screen w-full"
                     style={{
                         // Using 'fixed' instead of 'absolute' and z-[-1] to ensure it covers the entire viewport and stays behind content
                         background: "radial-gradient(125% 125% at 50% 10%, #000000 40%, #0d1a36 100%)",
@@ -66,8 +52,8 @@ const App = () => {
                 />
             )}
             {theme === 'light' && (
-                <div 
-                    className="fixed inset-0 z-[-1] min-h-screen w-full bg-white" 
+                <div
+                    className="fixed inset-0 z-[-1] min-h-screen w-full bg-white"
                     style={{
                         backgroundImage: `
                             radial-gradient(125% 125% at 50% 10%, #ffffff 40%, #14b8a6 100%)
