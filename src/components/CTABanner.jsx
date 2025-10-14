@@ -50,6 +50,8 @@ const CTABanner = ({ theme }) => {
                     colorFrequency={1}
                     noise={0.5}
                     glow={1}
+                    suspendWhenOffscreen={true} // Stop rendering when out of view
+                    dprLimit={1.0}
                 />
             </div>
 

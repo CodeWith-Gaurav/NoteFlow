@@ -1,27 +1,37 @@
-import React, { useState } from 'react'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Services from './components/Services'
-import Footer from './components/Footer'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import InfographicGenerator from './pages/InfographicGenerator'
-import Preloader from './components/Preloader'
-import FAQSection from './components/FAQSection'
-import CTABanner from './components/CTABanner'
-import { SignInButton } from '@clerk/clerk-react'
+// App.jsx (MODIFIED)
+
+import React, { useState, Suspense } from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Footer from './components/Footer';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import Preloader from './components/Preloader';
+
+// 1. LAZY LOAD HEAVY COMPONENTS
+const LazyServices = React.lazy(() => import('./components/Services'));
+const LazyFAQSection = React.lazy(() => import('./components/FAQSection'));
+const LazyCTABanner = React.lazy(() => import('./components/CTABanner'));
+const LazyInfographicGenerator = React.lazy(() => import('./pages/InfographicGenerator'));
 
 
-const LandingPage = ({ theme, setTheme, isEntranceAnimationComplete }) => (
+const LandingPage = ({ theme, setTheme, isEntranceAnimationComplete, isLoadedAndVisible }) => (
+    // 2. Only render heavy components when fully loaded and visible
     <>
-
         <title>NoteFlow | Transform Notes into Smart Infographics</title>
         <meta name="description" content="Turn scattered ideas into structured knowledge with NoteFlow. Our AI-powered tool instantly generates beautiful and informative infographics from your notes, PDFs, or text." />
-        <Hero theme={theme} isEntranceAnimationComplete={isEntranceAnimationComplete} />
-        <Services />
-        <FAQSection theme={theme} />
-        <CTABanner theme={theme} />
+
+        {/* HERO REMAINS FOR INITIAL LOAD (if it's not too heavy, but OGL component needs a fix) */}
+        <Hero theme={theme} isEntranceAnimationComplete={isEntranceAnimationComplete} isLoadedAndVisible={isLoadedAndVisible} />
+
+        {isLoadedAndVisible && (
+            <Suspense fallback={null}> {/* Fallback=null since content is hidden anyway */}
+                <LazyServices />
+                <LazyFAQSection theme={theme} />
+                <LazyCTABanner theme={theme} />
+            </Suspense>
+        )}
     </>
-)
+);
 
 const App = () => {
     const [loading, setLoading] = useState(true)
@@ -30,6 +40,7 @@ const App = () => {
     const location = useLocation()
     const isGeneratorPage = location.pathname === '/generate'
 
+    const isLoadedAndVisible = !loading && isEntranceAnimationComplete;
 
     const handleLoaderComplete = () => {
         setLoading(false);
@@ -62,21 +73,42 @@ const App = () => {
                     }}
                 />
             )}
-            <div className={loading ? 'invisible' : 'visible'}>
-                <Navbar theme={theme} setTheme={setTheme} isGeneratorPage={isGeneratorPage} isEntranceAnimationComplete={isEntranceAnimationComplete} />
+            {(!loading) && (
+                <div className={!isLoadedAndVisible ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}>
+                    <Navbar
+                        theme={theme}
+                        setTheme={setTheme}
+                        isGeneratorPage={isGeneratorPage}
+                        isEntranceAnimationComplete={isEntranceAnimationComplete}
+                    />
 
-                {/* ⭐️ SEO: Use a <main> tag for primary content */}
-                <main>
-                    <Routes>
-                        <Route path="/" element={<LandingPage theme={theme} setTheme={setTheme} isEntranceAnimationComplete={isEntranceAnimationComplete} />} />
-                        <Route path="/generate" element={<InfographicGenerator />} />
-                    </Routes>
-                </main>
+                    <main>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<LandingPage
+                                    theme={theme}
+                                    setTheme={setTheme}
+                                    isEntranceAnimationComplete={isEntranceAnimationComplete}
+                                    isLoadedAndVisible={isLoadedAndVisible}
+                                />}
+                            />
+                            <Route
+                                path="/generate"
+                                element={
+                                    <Suspense fallback={<div>Loading Generator...</div>}>
+                                        <LazyInfographicGenerator />
+                                    </Suspense>
+                                }
+                            />
+                        </Routes>
+                    </main>
 
-                {!isGeneratorPage && <Footer theme={theme} />}
-            </div>
+                    {!isGeneratorPage && <Footer theme={theme} />}
+                </div>
+            )}
         </div>
-    )
+    );
 }
 
 export default App

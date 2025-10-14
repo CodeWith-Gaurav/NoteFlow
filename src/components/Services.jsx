@@ -1,9 +1,20 @@
 import React from 'react'
 import assets from '../assets/assets'
 import Title from './Title'
-import ServiceCard from './ServiceCard'
+import ServiceCard, { itemVariants } from './ServiceCard'
 // ⭐️ ANIMATION: Standardized import
 import { motion } from "framer-motion"
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            when: "beforeChildren",
+            staggerChildren: 0.1 // Stagger delay
+        }
+    }
+};
 
 const Services = () => {
     const serviceData = [
@@ -40,24 +51,25 @@ const Services = () => {
     return (
         // ⭐️ SEO: Changed from motion.div to motion.section
         <motion.section
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             transition={{ duration: 0.7, delay: 0.5 }}
-            viewport={{ once: true }} 
-            id='services' 
+            viewport={{ once: true }}
+            id='services'
             className='relative flex flex-col items-center gap-7 px-4 sm:px-12 lg:px-24 xl:px-40 pt-20 sm:pt-40 text-gray-700 dark:text-white bg-transparent'>
-            
+
             <img src={assets.bgImage2} className='absolute -top-110 -left-70 -z-1 dark:hidden' alt="" />
             <Title title='How can we help?' desc='From note-taking to organizing and planning, NoteFlow makes it easier to manage your ideas and keep everything connected' />
-            
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.7 }}
-                viewport={{ once: true }} 
+                viewport={{ once: true }}
                 className='flex flex-col md:grid grid-cols-2'>
                 {serviceData.map((service, index) => (
-                    <ServiceCard key={index} service={service} index={index} />
+                    <ServiceCard key={index} service={service} index={index} variants={itemVariants} />
                 ))}
             </motion.div>
         </motion.section>

@@ -13,7 +13,7 @@ import Particles from './Particles'
 const PARTICLE_COLORS_DARK = ['#5044E5', '#4d8cea', '#ffffff']; // Violet, Blue, White
 const PARTICLE_COLORS_LIGHT = ['#5044E5', '#4d8cea', '#000000']; // Violet, Blue, Black (for contrast)
 // ⭐️ ACCEPT THE PROP
-const Hero = ({ isEntranceAnimationComplete, theme = 'dark' }) => {
+const Hero = ({ isEntranceAnimationComplete, theme = 'dark', isLoadedAndVisible }) => {
     const { isSignedIn } = useUser()
     const navigate = useNavigate()
 
@@ -64,18 +64,20 @@ const Hero = ({ isEntranceAnimationComplete, theme = 'dark' }) => {
         <div id='hero' className='relative flex flex-col items-center gap-6 py-20 px-4 sm:px-12 lg:px-24 xl:px-40 text-center w-full overflow-hidden text-gray-700 dark:text-white bg-transparent'>
 
 
-            <div className='absolute inset-0 z-0 h-full w-full pointer-events-none'>
-                <Particles
-                    particleColors={particleColors}
-                    particleCount={300} // Slightly more for visual impact
-                    particleSpread={10}
-                    speed={0.3} // Slightly faster movement
-                    particleBaseSize={100}
-                    moveParticlesOnHover={true} // Disable hover to avoid complexity
-                    alphaParticles={true}
-                    disableRotation={true} // Keep background subtle
-                />
-            </div>
+            {/* ⭐️ CRITICAL FIX: Conditionally render Particles ONLY when the main content is visible */}
+            {isLoadedAndVisible && (
+                <div className='absolute inset-0 z-0 h-full w-full pointer-events-none'>
+                    <Particles
+                        particleColors={particleColors}
+                        particleCount={300}
+                        speed={0.3}// Slightly faster movement
+                        particleBaseSize={100}
+                        moveParticlesOnHover={true} // Disable hover to avoid complexity
+                        alphaParticles={true}
+                        disableRotation={true} // Keep background subtle
+                    />
+                </div>
+            )}
             {/* ⭐️ 2. CONTENT CONTAINER (FOREGROUND LAYER) */}
             <div className='relative z-10 w-full flex flex-col items-center gap-6'>
 

@@ -3,48 +3,48 @@ import { Renderer, Triangle, Program, Mesh } from 'ogl';
 
 // ⭐️ Global storage for OGL instance to avoid passing around or re-creating
 const ogl = {
-    renderer: null,
-    gl: null,
-    program: null,
-    mesh: null,
-    container: null,
-    raf: 0,
-    t0: performance.now(),
-    rotBuf: new Float32Array(9),
-    iResBuf: new Float32Array(2),
-    offsetPxBuf: new Float32Array(2),
-    pointer: { x: 0, y: 0, inside: true },
-    wX: 0, wY: 0, wZ: 0, phX: 0, phZ: 0,
-    yaw: 0, pitch: 0, roll: 0,
-    targetYaw: 0, targetPitch: 0,
-    dpr: 1,
-    HOVSTR: 1,
-    INERT: 0.12,
-    NOISE_IS_ZERO: false,
-    TS: 0,
-    SCALE: 1,
-    animationType: 'rotate',
-    ro: null,
-    io: null
+  renderer: null,
+  gl: null,
+  program: null,
+  mesh: null,
+  container: null,
+  raf: 0,
+  t0: performance.now(),
+  rotBuf: new Float32Array(9),
+  iResBuf: new Float32Array(2),
+  offsetPxBuf: new Float32Array(2),
+  pointer: { x: 0, y: 0, inside: true },
+  wX: 0, wY: 0, wZ: 0, phX: 0, phZ: 0,
+  yaw: 0, pitch: 0, roll: 0,
+  targetYaw: 0, targetPitch: 0,
+  dpr: 1,
+  HOVSTR: 1,
+  INERT: 0.12,
+  NOISE_IS_ZERO: false,
+  TS: 0,
+  SCALE: 1,
+  animationType: 'rotate',
+  ro: null,
+  io: null
 };
 
 // Utility function to set rotation matrix
 const setMat3FromEuler = (yawY, pitchX, rollZ, out) => {
-    // ... (Your original setMat3FromEuler implementation remains the same)
-    const cy = Math.cos(yawY), sy = Math.sin(yawY);
-    const cx = Math.cos(pitchX), sx = Math.sin(pitchX);
-    const cz = Math.cos(rollZ), sz = Math.sin(rollZ);
-    const r00 = cy * cz + sy * sx * sz;
-    const r01 = -cy * sz + sy * sx * cz;
-    const r02 = sy * cx;
-    const r10 = cx * sz;
-    const r11 = cx * cz;
-    const r12 = -sx;
-    const r20 = -sy * cz + cy * sx * sz;
-    const r21 = sy * sz + cy * sx * cz;
-    const r22 = cy * cx;
-    out[0] = r00; out[1] = r10; out[2] = r20; out[3] = r01; out[4] = r11; out[5] = r21; out[6] = r02; out[7] = r12; out[8] = r22;
-    return out;
+  // ... (Your original setMat3FromEuler implementation remains the same)
+  const cy = Math.cos(yawY), sy = Math.sin(yawY);
+  const cx = Math.cos(pitchX), sx = Math.sin(pitchX);
+  const cz = Math.cos(rollZ), sz = Math.sin(rollZ);
+  const r00 = cy * cz + sy * sx * sz;
+  const r01 = -cy * sz + sy * sx * cz;
+  const r02 = sy * cx;
+  const r10 = cx * sz;
+  const r11 = cx * cz;
+  const r12 = -sx;
+  const r20 = -sy * cz + cy * sx * sz;
+  const r21 = sy * sz + cy * sx * cz;
+  const r22 = cy * cx;
+  out[0] = r00; out[1] = r10; out[2] = r20; out[3] = r01; out[4] = r11; out[5] = r21; out[6] = r02; out[7] = r12; out[8] = r22;
+  return out;
 };
 
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -188,7 +188,8 @@ const Prism = ({
   inertia = 0.05,
   bloom = 1,
   suspendWhenOffscreen = false,
-  timeScale = 0.5
+  timeScale = 0.5,
+  dprLimit = 2
 }) => {
   const containerRef = useRef(null);
 
@@ -200,38 +201,38 @@ const Prism = ({
     let continueRAF = true;
 
     if (ogl.animationType === 'hover') {
-        const maxPitch = 0.6 * ogl.HOVSTR;
-        const maxYaw = 0.6 * ogl.HOVSTR;
-        ogl.targetYaw = (ogl.pointer.inside ? -ogl.pointer.x : 0) * maxYaw;
-        ogl.targetPitch = (ogl.pointer.inside ? ogl.pointer.y : 0) * maxPitch;
-        ogl.yaw = lerp(ogl.yaw, ogl.targetYaw, ogl.INERT);
-        ogl.pitch = lerp(ogl.pitch, ogl.targetPitch, ogl.INERT);
-        ogl.roll = lerp(ogl.roll, 0, 0.1);
-        ogl.program.uniforms.uRot.value = setMat3FromEuler(ogl.yaw, ogl.pitch, ogl.roll, ogl.rotBuf);
+      const maxPitch = 0.6 * ogl.HOVSTR;
+      const maxYaw = 0.6 * ogl.HOVSTR;
+      ogl.targetYaw = (ogl.pointer.inside ? -ogl.pointer.x : 0) * maxYaw;
+      ogl.targetPitch = (ogl.pointer.inside ? ogl.pointer.y : 0) * maxPitch;
+      ogl.yaw = lerp(ogl.yaw, ogl.targetYaw, ogl.INERT);
+      ogl.pitch = lerp(ogl.pitch, ogl.targetPitch, ogl.INERT);
+      ogl.roll = lerp(ogl.roll, 0, 0.1);
+      ogl.program.uniforms.uRot.value = setMat3FromEuler(ogl.yaw, ogl.pitch, ogl.roll, ogl.rotBuf);
 
-        if (ogl.NOISE_IS_ZERO && !ogl.pointer.inside) {
-            const settled =
-                Math.abs(ogl.yaw - ogl.targetYaw) < 1e-4 && Math.abs(ogl.pitch - ogl.targetPitch) < 1e-4 && Math.abs(ogl.roll) < 1e-4;
-            if (settled) continueRAF = false;
-        }
+      if (ogl.NOISE_IS_ZERO && !ogl.pointer.inside) {
+        const settled =
+          Math.abs(ogl.yaw - ogl.targetYaw) < 1e-4 && Math.abs(ogl.pitch - ogl.targetPitch) < 1e-4 && Math.abs(ogl.roll) < 1e-4;
+        if (settled) continueRAF = false;
+      }
     } else if (ogl.animationType === '3drotate') {
-        const tScaled = time * ogl.TS;
-        ogl.yaw = tScaled * ogl.wY;
-        ogl.pitch = Math.sin(tScaled * ogl.wX + ogl.phX) * 0.6;
-        ogl.roll = Math.sin(tScaled * ogl.wZ + ogl.phZ) * 0.5;
-        ogl.program.uniforms.uRot.value = setMat3FromEuler(ogl.yaw, ogl.pitch, ogl.roll, ogl.rotBuf);
-        if (ogl.TS < 1e-6) continueRAF = false;
+      const tScaled = time * ogl.TS;
+      ogl.yaw = tScaled * ogl.wY;
+      ogl.pitch = Math.sin(tScaled * ogl.wX + ogl.phX) * 0.6;
+      ogl.roll = Math.sin(tScaled * ogl.wZ + ogl.phZ) * 0.5;
+      ogl.program.uniforms.uRot.value = setMat3FromEuler(ogl.yaw, ogl.pitch, ogl.roll, ogl.rotBuf);
+      if (ogl.TS < 1e-6) continueRAF = false;
     } else {
-        // 'rotate' (base wobble) or no animation
-        if (ogl.TS < 1e-6) continueRAF = false;
+      // 'rotate' (base wobble) or no animation
+      if (ogl.TS < 1e-6) continueRAF = false;
     }
 
     if (ogl.renderer && ogl.mesh) ogl.renderer.render({ scene: ogl.mesh });
 
     if (continueRAF && (ogl.animationType !== 'hover' || ogl.pointer.inside || !ogl.NOISE_IS_ZERO)) {
-        ogl.raf = requestAnimationFrame(render);
+      ogl.raf = requestAnimationFrame(render);
     } else {
-        ogl.raf = 0;
+      ogl.raf = 0;
     }
   };
 
@@ -253,18 +254,18 @@ const Prism = ({
 
     // --- Cleanup function for unmount ---
     return () => {
-        stopRAF();
-        if (ogl.ro) ogl.ro.disconnect();
-        if (ogl.io && ogl.container.__prismIO) ogl.io.disconnect();
-        if (ogl.animationType === 'hover') {
-            window.removeEventListener('pointermove', ogl.onPointerMove);
-            window.removeEventListener('mouseleave', ogl.onLeave);
-            window.removeEventListener('blur', ogl.onBlur);
-        }
-        if (ogl.gl && ogl.gl.canvas.parentElement === container) container.removeChild(ogl.gl.canvas);
-        ogl.renderer = null; ogl.gl = null; ogl.program = null; ogl.mesh = null; ogl.container = null;
+      stopRAF();
+      if (ogl.ro) ogl.ro.disconnect();
+      if (ogl.io && ogl.container.__prismIO) ogl.io.disconnect();
+      if (ogl.animationType === 'hover') {
+        window.removeEventListener('pointermove', ogl.onPointerMove);
+        window.removeEventListener('mouseleave', ogl.onLeave);
+        window.removeEventListener('blur', ogl.onBlur);
+      }
+      if (ogl.gl && ogl.gl.canvas.parentElement === container) container.removeChild(ogl.gl.canvas);
+      ogl.renderer = null; ogl.gl = null; ogl.program = null; ogl.mesh = null; ogl.container = null;
     };
-  }, []); 
+  }, []);
 
   // 2. ⭐️ STRUCTURAL/ANIMATION SETUP EFFECT (Runs on mount, or if structural props change)
   // We only run this on props that affect the actual GL context or loop logic
@@ -279,7 +280,7 @@ const Prism = ({
     const rnd = () => Math.random();
     const RSX = 1; const RSY = 1; const RSZ = 1;
 
-    ogl.dpr = Math.min(2, window.devicePixelRatio || 1);
+    ogl.dpr = Math.min(dprLimit, window.devicePixelRatio || 1);
     ogl.renderer = new Renderer({
       dpr: ogl.dpr,
       alpha: transparent,
@@ -291,14 +292,14 @@ const Prism = ({
     ogl.gl.disable(ogl.gl.BLEND);
     ogl.container = container;
     ogl.NOISE_IS_ZERO = noise < 1e-6;
-    
+
     // Initial random values for 3drotate
     ogl.wX = (0.3 + rnd() * 0.6) * RSX;
     ogl.wY = (0.2 + rnd() * 0.7) * RSY;
     ogl.wZ = (0.1 + rnd() * 0.5) * RSZ;
     ogl.phX = rnd() * Math.PI * 2;
     ogl.phZ = rnd() * Math.PI * 2;
-    
+
     // Canvas styling
     Object.assign(ogl.gl.canvas.style, {
       position: 'absolute',
@@ -310,31 +311,31 @@ const Prism = ({
     container.appendChild(ogl.gl.canvas);
 
     const geometry = new Triangle(ogl.gl);
-    
+
     // Create uniforms object with structural defaults
     const uniforms = {
-        iResolution: { value: ogl.iResBuf },
-        iTime: { value: 0 },
-        uHeight: { value: H },
-        uBaseHalf: { value: BASE_HALF },
-        uUseBaseWobble: { value: animationType === 'rotate' ? 1 : 0 },
-        uRot: { value: ogl.rotBuf },
-        uGlow: { value: glow },
-        uOffsetPx: { value: ogl.offsetPxBuf },
-        uNoise: { value: noise },
-        uSaturation: { value: transparent ? 1.5 : 1 },
-        uScale: { value: scale },
-        uHueShift: { value: hueShift },
-        uColorFreq: { value: colorFrequency },
-        uBloom: { value: bloom },
-        uCenterShift: { value: H * 0.25 },
-        uInvBaseHalf: { value: 1 / BASE_HALF },
-        uInvHeight: { value: 1 / H },
-        uMinAxis: { value: Math.min(BASE_HALF, H) },
-        uPxScale: {
-            value: 1 / ((ogl.gl.drawingBufferHeight || 1) * 0.1 * scale)
-        },
-        uTimeScale: { value: timeScale }
+      iResolution: { value: ogl.iResBuf },
+      iTime: { value: 0 },
+      uHeight: { value: H },
+      uBaseHalf: { value: BASE_HALF },
+      uUseBaseWobble: { value: animationType === 'rotate' ? 1 : 0 },
+      uRot: { value: ogl.rotBuf },
+      uGlow: { value: glow },
+      uOffsetPx: { value: ogl.offsetPxBuf },
+      uNoise: { value: noise },
+      uSaturation: { value: transparent ? 1.5 : 1 },
+      uScale: { value: scale },
+      uHueShift: { value: hueShift },
+      uColorFreq: { value: colorFrequency },
+      uBloom: { value: bloom },
+      uCenterShift: { value: H * 0.25 },
+      uInvBaseHalf: { value: 1 / BASE_HALF },
+      uInvHeight: { value: 1 / H },
+      uMinAxis: { value: Math.min(BASE_HALF, H) },
+      uPxScale: {
+        value: 1 / ((ogl.gl.drawingBufferHeight || 1) * 0.1 * scale)
+      },
+      uTimeScale: { value: timeScale }
     };
 
     ogl.program = new Program(ogl.gl, { vertex, fragment, uniforms });
@@ -378,29 +379,29 @@ const Prism = ({
     ogl.INERT = inertia;
     ogl.TS = timeScale;
     ogl.SCALE = scale;
-    
+
     if (animationType === 'hover') {
       window.addEventListener('pointermove', ogl.onMove, { passive: true });
       window.addEventListener('mouseleave', ogl.onLeave);
       window.addEventListener('blur', ogl.onBlur);
     }
-    
+
     // Intersection Observer for suspendWhenOffscreen
     if (suspendWhenOffscreen) {
-        ogl.io = new IntersectionObserver(entries => {
-            const vis = entries.some(e => e.isIntersecting);
-            if (vis) startRAF();
-            else stopRAF();
-        }, { threshold: 0.1 });
-        ogl.io.observe(container);
-        container.__prismIO = ogl.io;
+      ogl.io = new IntersectionObserver(entries => {
+        const vis = entries.some(e => e.isIntersecting);
+        if (vis) startRAF();
+        else stopRAF();
+      }, { threshold: 0.1 });
+      ogl.io.observe(container);
+      container.__prismIO = ogl.io;
     }
-    
+
     startRAF();
 
   }, [
     // Structural/Setup Dependencies: Only include props that change the GL program/geometry/listeners
-    height, baseWidth, transparent, animationType, suspendWhenOffscreen
+    height, baseWidth, transparent, animationType, suspendWhenOffscreen, dprLimit
   ]);
 
 
@@ -414,7 +415,7 @@ const Prism = ({
     ogl.program.uniforms.uHueShift.value = hueShift;
     ogl.program.uniforms.uColorFreq.value = colorFrequency;
     ogl.program.uniforms.uBloom.value = bloom;
-    
+
     // Update global state for render loop logic
     ogl.HOVSTR = hoverStrength;
     ogl.INERT = inertia;
@@ -423,9 +424,9 @@ const Prism = ({
 
     // Restart RAF if it was settled in hover mode and a prop changed
     if (ogl.animationType === 'hover' && ogl.raf === 0 && !ogl.NOISE_IS_ZERO) {
-        startRAF();
+      startRAF();
     }
-    
+
   }, [
     glow, noise, hueShift, colorFrequency, bloom, hoverStrength, inertia, timeScale
   ]);
